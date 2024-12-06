@@ -17,7 +17,7 @@ index 87da38a..f7d78ba 100755
          curr = 0
          cluster = 0
          incr = self.fat_type / 8
-@@ -631,7 +639,7 @@ class PyFat(object):
+@@ -631,7 +639,7 @@
              FATDirectoryEntry.FAT_DIRECTORY_HEADER_SIZE
  
          # Parse all directory entries in root directory
@@ -26,7 +26,7 @@ index 87da38a..f7d78ba 100755
                                                         root_dir_byte +
                                                         max_bytes)
          for dir_entry in subdirs:
-@@ -720,12 +728,15 @@ class PyFat(object):
+@@ -720,12 +728,15 @@
              max_address = FATDirectoryEntry.FAT_DIRECTORY_HEADER_SIZE
  
          dir_entries = []
@@ -42,7 +42,7 @@ index 87da38a..f7d78ba 100755
              try:
                  dir_sn.set_byte_name(dir_hdr["DIR_Name"])
              except NotAFatEntryException as ex:
-@@ -769,7 +780,7 @@ class PyFat(object):
+@@ -769,7 +780,7 @@
              # Reset temporary LFN entry
              tmp_lfn_entry = FATLongDirectoryEntry()
  
@@ -51,7 +51,7 @@ index 87da38a..f7d78ba 100755
  
      def parse_dir_entries_in_cluster_chain(self, cluster) -> list:
          """Parse directory entries while following given cluster chain."""
-@@ -782,8 +793,10 @@ class PyFat(object):
+@@ -782,8 +793,10 @@
              b = self.get_data_cluster_address(c)
              ret = self.parse_dir_entries_in_address(b, b+max_bytes,
                                                      tmp_lfn_entry)
@@ -63,7 +63,19 @@ index 87da38a..f7d78ba 100755
  
          return dir_entries
  
-@@ -960,14 +973,14 @@ class PyFat(object):
+@@ -826,9 +839,8 @@
+                 raise PyFATException("Bad cluster found in FAT cluster "
+                                      "chain, cannot access file")
+             elif self.fat[i] == cluster_vals["FREE_CLUSTER"]:
+-                # FREE_CLUSTER mark when following a chain is treated an error
+-                raise PyFATException("FREE_CLUSTER mark found in FAT cluster "
+-                                     "chain, cannot access file")
++                yield i
++                return
+             else:
+                 raise PyFATException("Invalid or unknown FAT cluster "
+                                      "entry found with value "
+@@ -960,14 +972,14 @@
  
      def __verify_bpb_header(self):
          """Verify BPB header for correctness."""
