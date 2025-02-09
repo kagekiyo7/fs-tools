@@ -33,7 +33,7 @@ def main():
             sector = struct.unpack_from("<I", part)[0]
             sector = sector >> 8
             assert sector not in matched
-            if sector in matched: print(f"WARM: (block: {hex(block)}, sector: {hex(sector)})")
+            if sector in matched: print(f"WARN: (sector number: {hex(sector)}, oob offset: {hex(block)})")
             matched.add(sector)
             fat[0x200*sector:0x200*(sector+1)] = flash[0x200*block:0x200*(block+1)]
 
